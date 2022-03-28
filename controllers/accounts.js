@@ -7,7 +7,6 @@ const isAuth = require('./isAuth')
 
 //MODELS
 const User = require('../models/user');
-const e = require('express');
 
 //CREATE ACCOUNT
 router.post('/createAccount', async(request, response) => {

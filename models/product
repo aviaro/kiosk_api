@@ -1,0 +1,24 @@
+const { default: mongoose } = require('mongoose');
+const moongoose = require('mongoose')
+const schema  =moongoose.Schema;
+
+
+const ProductSchma = new schema ({
+    _id: mongoose.Schema.Types.ObjectId,
+    ProductName: String,
+    ProductImages: [
+        {
+            imageSource:String
+        }
+    ],
+    price:Number,
+    discount:{type: Number, default: 0},
+    unitsInStock:Number,
+    disclaimer:String,
+    Isagelimitid:Boolean,
+    StoreId:{type: mongoose.Schema.Types.ObjectId,ref:"store"},
+    CategoryID:{type: mongoose.Schema.Types.ObjectId,ref:"category"},
+  
+});
+
+module.exports = mongoose.model('product',ProductSchma)
