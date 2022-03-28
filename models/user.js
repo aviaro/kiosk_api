@@ -1,6 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const moongoose = require('mongoose')
-const schema  =moongoose.Schema;
+const schema  = moongoose.Schema;
 
 
 const userschema = new schema ({
