@@ -1,14 +1,13 @@
-const { default: mongoose } = require('mongoose');
-const moongoose = require('mongoose')
-const schema  =moongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-
-const categorySchema = new schema ({
+const categorySchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    CategoryName: String,
-    CategoryImage: {type: String, default: "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png"},
-    StoreId:{type: mongoose.Schema.Types.ObjectId,ref:"store"},
-    position:Number
+    storeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' },
+    categoryName: String,
+    categoryImage: {type: String, default: 'https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png'},
+    priority: Number
 });
 
-module.exports = mongoose.model('category',categorySchema)
+module.exports = mongoose.model('Category', categorySchema);
+

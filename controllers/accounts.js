@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const isAuth = require('./isAuth')
+const isAuth = require('./isAuth');
 
 //MODELS
 const User = require('../models/user');
+const Store = require('../models/store');
 
 //CREATE ACCOUNT
 router.post('/createAccount', async(request, response) => {
@@ -97,7 +98,6 @@ router.post('/login', async(request, response) => {
         });
     })
 });
-
 //VERIFY PASSCODE
 router.post('/verify', async(request, response) => {
     //Get passcode and email
@@ -134,7 +134,6 @@ router.post('/verify', async(request, response) => {
         });
     })
 });
-
 //FORGET PASSWORD
 router.post('/forgetPassword', async(request,response) => {
     //Get user email
@@ -163,7 +162,6 @@ router.post('/forgetPassword', async(request,response) => {
         });
     })
 })
-
 router.post('/updateNewPassword', async(request, response) => {
     const {email,newpassword} = request.body;
     User.findOne({email: email})
@@ -189,11 +187,9 @@ router.post('/updateNewPassword', async(request, response) => {
         });
     })
 })
-
 function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 router.get('/sayHello', async(request, response) => {
     try {
         const users = await User.find();
@@ -208,10 +204,19 @@ router.get('/sayHello', async(request, response) => {
     
 })
 
-router.get('/getUserData', isAuth, async(request, response) => {
+router.get('/getUserData', isAuth, async(request,response) => {
+    const id = request.account._id;
+    const store = await Store.findOne({associateId: id}).populate('associateId');
     return response.status(200).json({
-        message: `hello ${request.account.email}`
-    })
+        data: store
+    });
 })
+
+
+
+
+
+
+
 
 module.exports = router;
