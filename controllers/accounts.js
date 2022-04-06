@@ -8,6 +8,8 @@ const isAuth = require('./isAuth');
 //MODELS
 const User = require('../models/user');
 const Store = require('../models/store');
+const category = require('../models/category');
+const product = require('../models/product');
 
 //CREATE ACCOUNT
 router.post('/createAccount', async(request, response) => {

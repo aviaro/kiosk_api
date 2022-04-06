@@ -80,9 +80,99 @@ router.delete('/deleteCategory/:categoryId', isAuth, async(request,response) => 
         })
     })
  });
-router.post('/addProduct', isAuth, async(request,response) => { });
-router.put('/updateProduct', isAuth, async(request,response) => { });
-router.delete('/deleteProduct', isAuth, async(request,response) => { });
+router.post('/addProduct/:categoryId', isAuth, async(request,response) => {
+    const ProductId = mongoose.Types.ObjectId();
+    const accountId = request.account._id;
+    const store = await Store.findOne({associateId:accountId});
+    const categoryId = request.params.categoryId
+    const {productName, price,unitInStock,desclimer,isAgeLimitation,imageSource,discount} = request.body;
+
+    const _product = new Product({
+        _id:ProductId,
+        categoryId: categoryId,
+        storeId:store._id,
+        productName:productName,
+        price: price,
+        discount: discount,
+        unitInStock: unitInStock,
+        productImages:[
+            {
+                imageSource:imageSource
+            }
+        
+        ],
+        desclimer: desclimer,
+        isAgeLimitation:isAgeLimitation,
+
+
+
+    })
+    return _product.save()
+    .then(product_updated=>{
+        return response.status(200).json({
+            status: true,
+            message: product_updated
+        });
+
+    })
+    .catch(err => {
+        return response.status(500).json({
+            status: false,
+            message: err
+        });
+    })
+
+ });
+router.put('/updateProduct/:productId', isAuth, async(request,response) => {
+   const productId= request.params.productId;
+   const product = await Product.findById({_id:productId});
+   const {productName, price,unitInStock,desclimer,isAgeLimitation,imageSource,discount} = request.body;
+
+   if(imageSource!=' '){
+
+       product.productImages.push({imageSource:imageSource})
+
+   }
+   product.productName= productName;
+   product.price=price;
+   product.unitInStock=unitInStock;
+   product.discount=discount;
+   product.desclimer=desclimer;
+   product.isAgeLimitation=isAgeLimitation
+   return product.save()
+   .then(product_updated => {
+       return response.status(200).json({
+           status: true,
+           message: product_updated
+       })
+
+
+   })
+   .catch(err=>{
+    return response.status(200).json({
+        status: false,
+        message: err
+    })
+   })
+
+
+ });
+router.delete('/deleteProduct/:productId', isAuth, async(request,response) => {
+    const pid = request.params.productId;
+    Product.findByIdAndDelete(pid)
+    .then(Product_deleted => {
+        return response.status(200).json({
+            status: true,
+            message: Product_deleted
+        })
+    })
+    .catch(err => {
+        return response.status(500).json({
+            status: false,
+            message: err
+        })
+    })
+ });
 router.get('/getAllCategories', isAuth, async(request,response) => {
     const accountId = request.account._id;
     const store = await Store.findOne({associateId: accountId});
